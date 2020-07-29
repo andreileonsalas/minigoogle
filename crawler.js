@@ -2,10 +2,10 @@ const request = require('request-promise');
 const cheerio = require('cheerio');
 
 const fs = require('fs-extra');
-const writeStream = fs.createWriteStream('titulos.csv');
+const writeStream = fs.createWriteStream('titulos.txt');
 
 async function init() {
-    let paginas = ['https://es.wikipedia.org/wiki/Python','https://en.wikipedia.org/wiki/C_(programming_language)','https://en.wikipedia.org/wiki/Java_(programming_language)']
+    let paginas = ['https://en.wikipedia.org/wiki/Python_(programming_language)','https://en.wikipedia.org/wiki/C_(programming_language)','https://en.wikipedia.org/wiki/Java_(programming_language)']
     for(i=0;i<paginas.length;i++){
     try {
         const $ = await request({
@@ -18,10 +18,10 @@ async function init() {
 
         const webSiteHeading = $('h1').text().trim();
         console.log('Heading: ', webSiteHeading);
-        writeStream.write(`${websiteTitle},${webSiteHeading}\n`);
+        const quote = $('.mw-parser-output').find('p');
+        writeStream.write(`${websiteTitle},${webSiteHeading}\n ${quote.text()}\n`);
 
-        //const quote = $('.quote').find('a');
-        //console.log(quote.html());
+
 
         //const third_quote = $('.quote').next().next();
         // console.log(third_quote.html())
