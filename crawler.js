@@ -2,11 +2,12 @@ const request = require('request-promise');
 const cheerio = require('cheerio');
 
 const fs = require('fs-extra');
+const { accessSync } = require('fs-extra');
 const writeStream = fs.createWriteStream('titulos.txt');
 
 async function init() {
-    let paginas = ['https://en.wikipedia.org/wiki/Python_(programming_language)','https://en.wikipedia.org/wiki/C_(programming_language)','https://en.wikipedia.org/wiki/Java_(programming_language)']
-    for(i=0;i<paginas.length;i++){
+    let paginas = ['https://en.wikipedia.org/wiki/Lion']
+    for(i=0;i<5;i++){
     try {
         const $ = await request({
             uri: paginas[i],
@@ -18,9 +19,11 @@ async function init() {
 
         const webSiteHeading = $('h1').text().trim();
         console.log('Heading: ', webSiteHeading);
-        const quote = $('.mw-parser-output').find('p');
-        writeStream.write(`${websiteTitle},${webSiteHeading}\n ${quote.text()}\n`);
-
+        const texto = $('.mw-parser-output').find('p').text();
+        const enlace = 'https://en.wikipedia.org' + $('.mw-parser-output').find('p').find('a').attr('href');
+        writeStream.write(`${websiteTitle},${webSiteHeading}\n ${enlace}\n  ${texto}\n`);
+        paginas.push(enlace);
+        
 
 
         //const third_quote = $('.quote').next().next();
