@@ -6,8 +6,8 @@ const { accessSync } = require('fs-extra');
 const writeStream = fs.createWriteStream('titulos.txt');
 
 async function init() {
-    let paginas = ['https://en.wikipedia.org/wiki/Lion']
-    for(i=0;i<5;i++){
+    let paginas = ['https://es.wikipedia.org/wiki/Panthera_leo']
+    for(i=0;i<4;i++){
     try {
         const $ = await request({
             uri: paginas[i],
@@ -19,10 +19,18 @@ async function init() {
 
         const webSiteHeading = $('h1').text().trim();
         console.log('Heading: ', webSiteHeading);
+        
         const texto = $('.mw-parser-output').find('p').text();
-        const enlace = 'https://en.wikipedia.org' + $('.mw-parser-output').find('p').find('a').attr('href');
-        writeStream.write(`${websiteTitle},${webSiteHeading}\n ${enlace}\n  ${texto}\n`);
-        paginas.push(enlace);
+        
+        $('.mw-parser-output').find('p').each(function() {
+            $(this).find('a').each(function() {
+                let enlace ='https://es.wikipedia.org' +  $(this).attr('href');
+                paginas.push(enlace);
+            })
+        })
+        console.log(paginas);
+
+        writeStream.write(`${websiteTitle},${webSiteHeading}\n ${texto}\n`);
         
 
 
@@ -63,5 +71,8 @@ async function init() {
     }
 }
 }
+
+
+
 
 init();
