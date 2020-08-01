@@ -7,7 +7,7 @@ const writeStream = fs.createWriteStream('titulos.txt');
 
 async function init() {
     let paginas = ['https://es.wikipedia.org/wiki/Panthera_leo']
-    for(i=0;i<4;i++){
+    for(i=0;i<10;i++){
     try {
         const $ = await request({
             uri: paginas[i],
