@@ -6,65 +6,50 @@ const { accessSync } = require('fs-extra');
 const writeStream = fs.createWriteStream('titulos.txt');
 
 async function init() {
-    let paginas = ['https://es.wikipedia.org/wiki/Panthera_leo']
-    for(i=0;i<10;i++){
+    let paginas = ['https://www.ticportal.es/glosario-tic/base-datos-database']
+    for(i=0;i<1;i++){
     try {
         const $ = await request({
             uri: paginas[i],
             transform: body => cheerio.load(body)
         });
 
-        const websiteTitle = $('title').html();
-        console.log('Title: ', websiteTitle);
+        writeStream.write(`Titulo\n`);
+        const websiteTitle = $('title').html().trim();
+        writeStream.write(`${websiteTitle}\n`);
 
-        const webSiteHeading = $('h1').text().trim();
-        console.log('Heading: ', webSiteHeading);
+        writeStream.write(`h1\n`);
+        $('h1').each(function(){
+            const h1 = $(this).text().trim();
+            writeStream.write(`${h1}\n`);
+        })
+
+        writeStream.write(`h2\n`);
+        $('h2').each(function(){
+            const h2 = $(this).text().trim();
+            writeStream.write(`${h2}\n`);
+        })
+
+        writeStream.write(`h3\n`);
+        $('h3').each(function(){
+            const h3 = $(this).text().trim();
+            writeStream.write(`${h3}\n`);
+        })
+
+        writeStream.write(`p\n`);
+        $('p').each(function(){
+            const p = $(this).text();
+            writeStream.write(`${p}\n`);
+        })
         
-        const texto = $('.mw-parser-output').find('p').text();
-        
-        $('.mw-parser-output').find('p').each(function() {
+        writeStream.write(`href\n`);
+        $('p').each(function() {
             $(this).find('a').each(function() {
-                let enlace ='https://es.wikipedia.org' +  $(this).attr('href');
+                let enlace =$(this).attr('href');
+                writeStream.write(`${enlace}\n`);
                 paginas.push(enlace);
             })
         })
-        console.log(paginas);
-
-        writeStream.write(`${websiteTitle},${webSiteHeading}\n ${texto}\n`);
-        
-
-
-        //const third_quote = $('.quote').next().next();
-        // console.log(third_quote.html())
-
-        // Parent
-        //const containerClass = $('.row.header-box');
-        // console.log(containerClass.parent().html())
-
-        // $('.quote span.text').each((i, el) => {
-        //     const quote_text = $(el).text();
-        //     const quote = quote_text.replace(/(^\“|\”$)/g, "");
-        // })        
-/*
-        writeStream.write('Quote|Author|Tags\n');
-        const tags = [];
-        $('.quote').each((i, el) => {
-            const text = $(el).find('span.text').text().replace(/(^\“|\”$)/g, "");
-            const author = $(el).find('span small.author').text();
-            const tag = $(el).find('.tags a').html();
-            tags.push(tag);
-            // console.log(text, author, tags.join(','))
-            writeStream.write(`${text}|${author}|${tags}\n`);
-            // console.log(i, text, author)
-        })
-*/
-        //console.log('Done.');
-        // $('.quote .tags a').each((i, el) => {
-        //     // console.log($(el).html())
-        //     const text = $(el).text();
-        //     const link = $(el).attr('href');
-        //     console.log(text, link)
-        // });
 
     } catch (e) {
         console.log(e);
