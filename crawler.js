@@ -6,8 +6,20 @@ const { accessSync } = require('fs-extra');
 const writeStream = fs.createWriteStream('titulos.txt');
 const evitar = ["pdf","PDF"];
 
+function rep(l,e){
+    var found = l.find(function (element) { 
+        return element == e; 
+    }); 
+    if(found){
+        return true
+    }
+    else{
+        return false
+    }
+}
+
 async function init() {
-    let paginas = ['https://medium.com/javascript-scene/the-forgotten-history-of-oop-88d71b9b2d9f#:~:text=The%20big%20idea%20is%20messaging.%E2%80%9D&text=In%20a%202003%20email%20exchange,%2Dbinding%20of%20all%20things.%E2%80%9D']
+    let paginas = ['https://es.wikipedia.org/wiki/Real_Madrid_Club_de_F%C3%BAtbol','https://es.wikipedia.org/wiki/Segunda_Guerra_Mundial','https://es.wikipedia.org/wiki/Pol%C3%ADtica', 'https://es.wikipedia.org/wiki/COVID-19' ]
     for(i=0;i < paginas.length && i<20;i++){
     try {
         const $ = await request({
