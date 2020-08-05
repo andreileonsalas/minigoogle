@@ -5,7 +5,7 @@ const fs = require('fs-extra');
 const { accessSync } = require('fs-extra');
 
 const evitar = ["pdf","PDF"];
-
+const writeStream_all = fs.createWriteStream('all.txt');
 function rep(l,e){
     var found = l.find(function (element) { 
         return element == e; 
@@ -31,32 +31,38 @@ async function init() {
         var websiteTitle = ""
         if ($('title').html())
             websiteTitle = $('title').html().trim();
-        writeStream.write(`Titulo|${websiteTitle}\n`);
+            writeStream.write(`Titulo|${websiteTitle}\n`);
+            writeStream_all.write(`Titulo|${websiteTitle}\n`);
 
         $('h1').each(function(){
             const h1 = $(this).text().trim();
             writeStream.write(`h1|${h1}\n`);
+            writeStream_all.write(`h1|${h1}\n`);
         })
 
         $('h2').each(function(){
             const h2 = $(this).text().trim();
             writeStream.write(`h2|${h2}\n`);
+            writeStream_all.write(`h2|${h2}\n`);
         })
 
         $('h3').each(function(){
             const h3 = $(this).text().trim();
             writeStream.write(`h3|${h3}\n`);
+            writeStream_all.write(`h3|${h3}\n`);
         })
 
         $('h4').each(function(){
             const h4 = $(this).text().trim();
             writeStream.write(`h4|${h4}\n`);
+            writeStream_all.write(`h4|${h4}\n`);
         })
 
 
         $('p').each(function(){
             const p = $(this).text();
             writeStream.write(`p|${p}\n`);
+            writeStream_all.write(`p|${p}\n`);
         })
         
 
@@ -64,6 +70,7 @@ async function init() {
             $(this).find('a').each(function() {
                 let enlace =$(this).attr('href');
                 writeStream.write(`href|${enlace}\n`);
+                writeStream_all.write(`href|${enlace}\n`);
                 if (enlace != undefined)
                     enlacex = completar_link(enlace,paginas[i])
                 if (verificar_link(evitar,enlace))
