@@ -3,7 +3,7 @@ const cheerio = require('cheerio');
 
 const fs = require('fs-extra');
 const { accessSync } = require('fs-extra');
-const writeStream = fs.createWriteStream('titulos.txt');
+
 const evitar = ["pdf","PDF"];
 
 function rep(l,e){
@@ -21,6 +21,7 @@ function rep(l,e){
 async function init() {
     let paginas = ['https://es.wikipedia.org/wiki/Real_Madrid_Club_de_F%C3%BAtbol','https://es.wikipedia.org/wiki/Segunda_Guerra_Mundial','https://es.wikipedia.org/wiki/Pol%C3%ADtica', 'https://es.wikipedia.org/wiki/COVID-19' ]
     for(i=0;i < paginas.length && i<20;i++){
+        const writeStream = fs.createWriteStream('pagina'+(i+1)+'.txt');
     try {
         const $ = await request({
             uri: paginas[i],
