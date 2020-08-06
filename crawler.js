@@ -27,7 +27,7 @@ async function init() {
             uri: paginas[i],
             transform: body => cheerio.load(body)
         });
-
+        writeStream.write('href|'+paginas[i]+"\n");
         var websiteTitle = ""
         if ($('title').html())
             websiteTitle = $('title').html().trim();
@@ -118,6 +118,7 @@ function completar_link (link,linkInicial){
         partelink = link.substr(0,pos);
         //console.log(partelink );
         newlink = "";
+
         if (partelink.length == 0){
             newlink = linkInicial.substr(0,linkInicial.indexOf("/",9))
             //console.log("entro al 1 ")
