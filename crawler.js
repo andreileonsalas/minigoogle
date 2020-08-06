@@ -20,10 +20,11 @@ function rep(l,e){
 
 async function init() {
     let paginas = [['https://es.wikipedia.org/wiki/Real_Madrid_Club_de_F%C3%BAtbol','https://es.wikipedia.org/wiki/Segunda_Guerra_Mundial','https://es.wikipedia.org/wiki/Pol%C3%ADtica', 'https://es.wikipedia.org/wiki/COVID-19']]
+    let utilizados = []
     for(j=0;j<paginas.length && j<5; j++){
         let band = 0
-        for(i=0;i < paginas[j].length && i<5;i++){
-            console.log(i);
+        for(i=0;i < paginas[j].length && i< 5;i++){
+            console.log(paginas[j][i]);
         try {
             const $ = await request({
                 uri: paginas[j][i],
@@ -73,8 +74,16 @@ async function init() {
                         paginas.push([enlacex]);
                         band = 1
                     }
-                    if (band == 1){
-                        paginas[j+1].push(enlacex);
+                    else{
+                        var flag = true;
+                        for (l = 0  ;l < paginas.length && flag == true; l++){
+                            if (rep(paginas[l],enlacex))
+                                flag = false
+                        }
+                        if (flag){
+                            
+                            paginas[j+1].push(enlacex);
+                        }
                     }
                    
                         
@@ -124,7 +133,6 @@ function completar_link (link,linkInicial){
             return newlink + "/" + link;
     }
 }
-
 
 
 init();
