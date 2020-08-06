@@ -20,7 +20,7 @@ function rep(l,e){
 
 async function init() {
     let paginas = ['https://es.wikipedia.org/wiki/Real_Madrid_Club_de_F%C3%BAtbol','https://es.wikipedia.org/wiki/Segunda_Guerra_Mundial','https://es.wikipedia.org/wiki/Pol%C3%ADtica', 'https://es.wikipedia.org/wiki/COVID-19' ]
-    for(i=0;i < paginas.length && i<3;i++){
+    for(i=0;i < paginas.length && i<6;i++){
         const writeStream = fs.createWriteStream('pagina'+(i+1)+'.txt');
     try {
         const $ = await request({
@@ -58,23 +58,22 @@ async function init() {
             writeStream_all.write(`h4|${h4}\n`);
         })
 
-
         $('p').each(function(){
             const p = $(this).text();
             writeStream.write(`p|${p}\n`);
             writeStream_all.write(`p|${p}\n`);
         })
         
-
         $('p').each(function() {
             $(this).find('a').each(function() {
                 let enlace =$(this).attr('href');
-                writeStream.write(`href|${enlace}\n`);
-                writeStream_all.write(`href|${enlace}\n`);
-                if (enlace != undefined)
+                //writeStream.write(`href|${enlace}\n`);
+                //writeStream_all.write(`href|${enlace}\n`);
+                if (enlace != undefined){
                     enlacex = completar_link(enlace,paginas[i])
                 if (verificar_link(evitar,enlace))
                     paginas.push(enlacex);
+                }
             })
         })
 console.log(paginas);
@@ -112,7 +111,28 @@ function completar_link (link,linkInicial){
         return link;
     }
     else{
-        newlink = linkInicial.substr(0,linkInicial.indexOf("/",9))
+       //console.log(link)
+       //console.log(linkInicial)
+        
+        pos =  link.indexOf("/",1);
+        partelink = link.substr(0,pos);
+        //console.log(partelink );
+        newlink = "";
+        if (partelink.length == 0){
+            newlink = linkInicial.substr(0,linkInicial.indexOf("/",9))
+            //console.log("entro al 1 ")
+        }
+        else{
+          //  console.log("entro al segundo alt e")
+            pos2 = linkInicial.indexOf(partelink,0)
+            if (pos2 == -1){
+                newlink = linkInicial.substr(0,linkInicial.indexOf("/",9))
+            }
+            else{
+                newlink = linkInicial.substr(0,pos2)
+            }
+        }
+        //console.log("la parte del link es: " + newlink + "\n");
         if(link[0] == "/")
             return newlink +  link;
         else
