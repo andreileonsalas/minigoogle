@@ -10,7 +10,7 @@ const mysql = require("mysql");
 
 module.exports = mysql.createPool({
   host: "plataformaelectronicacr.com",
-  user: "Bases",
+  user: "bases",
   password: "Bases@123",
   database: "bases_Progra2"
 });
