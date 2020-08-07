@@ -6,24 +6,14 @@ const { accessSync } = require('fs-extra');
 
 const evitar = ["pdf","PDF"];
 const writeStream_all = fs.createWriteStream('all.txt');
-function rep(l,e){
-    var found = l.find(function (element) { 
-        return element == e; 
-    }); 
-    if(found){
-        return true
-    }
-    else{
-        return false
-    }
-}
+let bandera = true;
 
 async function init() {
     let paginas = [['https://es.wikipedia.org/wiki/Real_Madrid_Club_de_F%C3%BAtbol','https://es.wikipedia.org/wiki/Segunda_Guerra_Mundial','https://es.wikipedia.org/wiki/Pol%C3%ADtica', 'https://es.wikipedia.org/wiki/COVID-19']]
     let utilizados = []
     for(j=0;j<paginas.length && j<5; j++){
         let band = 0
-        for(i=0;i < paginas[j].length && i< 5;i++){
+        for(i=0;i < paginas[j].length && i< 2;i++){
             console.log(paginas[j][i]);
         try {
             const $ = await request({
@@ -69,23 +59,29 @@ async function init() {
                     let enlace =$(this).attr('href');
                     if (enlace != undefined)
                         enlacex = completar_link(enlace,paginas[j][i])
+                        console.log(enlacex);
                     if (verificar_link(evitar,enlace))
                     if (band==0){
                         paginas.push([enlacex]);
                         band = 1
                     }
                     else{
-                        var flag = true;
-                        for (l = 0  ;l < paginas.length && flag == true; l++){
-                            if (rep(paginas[l],enlacex))
-                                flag = false
+                        for(g=0; g<paginas.length && bandera == true ;g++){
+                            for(k=0;k<paginas[g].length && bandera==true;k++){
+                                var res= paginas[i][j].localeCompare(enlacex)
+                                if(res==0){
+                                    bandera=false;
+                                }
+                            }
                         }
-                        if (flag){
-                            
+                        if(bandera){
+                          
+                        
                             paginas[j+1].push(enlacex);
-                        }
+                            bandera=true;
+                        
                     }
-                   
+                }
                         
                 })
             })
@@ -94,9 +90,10 @@ async function init() {
             console.log(e);
         }
 }
+}
 
 }
-}
+
 
 
 function verificar_link (lista,link){
@@ -109,6 +106,19 @@ function verificar_link (lista,link){
         });    
     return result;
 }
+
+function rep(l,e){
+    for(i=0; i<l.length && bandera == true ;i++){
+        for(j=0;j<l[i].length && bandera==true;j++){
+            var res= l[i][j].localeCompare(e)
+            if(res==0){
+                bandera=false;
+            }
+        }
+    }
+    return bandera;
+}
+
 
 function revisar_inicio (link){
     result = false;
@@ -134,6 +144,4 @@ function completar_link (link,linkInicial){
     }
 }
 
-
-init();
-
+init()
