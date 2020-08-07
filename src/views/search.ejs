@@ -38,17 +38,17 @@
                   <table class="table table-bordered">
                     <thead>
                       <tr>
-                        <th>id</th>
+                        <th>Link</th>
                         <th>Palabra</th>
-                        <th>Cantidad</th>
+                        <th>Peso</th>
                       </tr>
                     </thead>
                     <tbody>
                       <% for (var i = 0; i < results.length;  i++) { %>
                         <tr>
-                          <td><%= results[i].id %></td>
-                          <td><%= results[i].palabra %></td>
-                          <td><%= results[i].cantidad %></td>
+                          <td><%= results[i].link %></td>
+                          <td><%= results[i].keyword %></td>
+                          <td><%= results[i].weight %></td>
                         </tr>
                       <% } %>
                     </tbody>

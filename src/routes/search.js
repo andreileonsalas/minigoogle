@@ -16,7 +16,7 @@ router.get('/search/:id',async (req,res)=>{
   const word = req.params.id;
   console.log(word);
 
-  pool.query('SELECT * FROM pruebaDatos', (error, result) => {
+  pool.query('SELECT * FROM search WHERE keyword LIKE ' + word + ' ORDER BY weight DESC', (error, result) => {
     if (error) throw error;
     console.log(result);
     //res.send(result);

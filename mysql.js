@@ -9,8 +9,8 @@ const mysql = require("mysql");
 // });
 
 module.exports = mysql.createPool({
-  host: "localhost",
-  user: "root",
-  password: "",
-  database: "prueba"
+  host: "plataformaelectronicacr.com",
+  user: "Bases",
+  password: "Bases@123",
+  database: "bases_Progra2"
 });
