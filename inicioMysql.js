@@ -1,8 +1,9 @@
 var mysql      = require('mysql');
 var connection = mysql.createConnection({
-  host     : 'plataformaelectronicacr.com',
-  user     : 'bases',
-  password : 'Bases@123'
+  host     : 'localhost',
+  user     : 'root',
+  password : '',
+  database: "bases_progra2"
 });
 
 connection.connect();
