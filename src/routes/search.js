@@ -12,11 +12,11 @@ router.get('/search',async (req,res)=>{
 });
 
 router.get('/search/:id',async (req,res)=>{
-
+  /*
   const word = req.params.id;
   console.log(word);
 
-  pool.query('SELECT * FROM pruebaDatos', (error, result) => {
+  pool.query('SELECT * FROM searchfinal WHERE keyword = "' + word + '" ORDER BY weight DESC', (error, result) => {
     if (error) throw error;
     console.log(result);
     //res.send(result);
@@ -24,16 +24,47 @@ router.get('/search/:id',async (req,res)=>{
       results: result
     });
   });
+  */
 
-  // const id = req.params.id;
-  // const body = JSON.parse(id);
-  // console.log(body);
-  // res.render('search');
-
+  const word = req.params.id;
+  console.log(word);
 
 
-  //res.render('search');
+  pool.query('SELECT * FROM searchfinal WHERE keyword = "' + word + '" ORDER BY weight DESC', (error1, result1) => {
+    if (error1) throw error1;
+    pool.query('SELECT * FROM cantidadPorPagina WHERE keyword = "' + word + '" ORDER BY count DESC', (error2, result2) => {
+      if (error2) throw error2;
 
+      var total = 0;
+      for (var i = 0; i < result2.length; i++) {
+        total += result2[i].count;
+      }
+      var result3 =
+        [
+          {
+            keyword: word,
+            count: total
+          }
+        ]
+
+      console.log(result1);
+      //res.send(result);
+      console.log(result2);
+      //res.send(result);
+      console.log("Total: " + total);
+
+
+      res.render('search', {
+        results: result1,
+        resultsPagina: result2,
+        resultsGeneral: result3
+      });
+
+    });
+
+
+
+  });
 
 });
 

@@ -33,27 +33,91 @@
                   </form>
                 </div>
 
+                <h3>
+                  Resultados de la palabra por peso:
+                </h3>
+
                 <div class="container">
                   <!--<h2>Nodos</h2>-->
                   <table class="table table-bordered">
                     <thead>
                       <tr>
-                        <th>id</th>
+                        <th>Link</th>
                         <th>Palabra</th>
-                        <th>Cantidad</th>
+                        <th>Peso</th>
                       </tr>
                     </thead>
                     <tbody>
                       <% for (var i = 0; i < results.length;  i++) { %>
                         <tr>
-                          <td><%= results[i].id %></td>
-                          <td><%= results[i].palabra %></td>
-                          <td><%= results[i].cantidad %></td>
+                          <td><%= results[i].link %></td>
+                          <td><%= results[i].keyword %></td>
+                          <td><%= results[i].weight %></td>
                         </tr>
                       <% } %>
                     </tbody>
                   </table>
                   </div>
+
+                  <br>
+                  <br>
+
+                  <h3>
+                    Conteo de palabra por pagina:
+                  </h3>
+
+                  <div class="container">
+                    <!--<h2>Nodos</h2>-->
+                    <table class="table table-bordered">
+                      <thead>
+                        <tr>
+                          <th>Link</th>
+                          <th>Palabra</th>
+                          <th>Conteo</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+
+                        <% for (var i = 0; i < resultsPagina.length;  i++) { %>
+                          <tr>
+                            <td><%= resultsPagina[i].link %></td>
+                            <td><%= resultsPagina[i].keyword %></td>
+                            <td><%= resultsPagina[i].count %></td>
+                          </tr>
+                        <% } %>
+
+                      </tbody>
+                    </table>
+                    </div>
+
+                    <br>
+                    <br>
+
+                    <h3>
+                      Conteo de palabra en general:
+                    </h3>
+
+                    <div class="container">
+                      <!--<h2>Nodos</h2>-->
+                      <table class="table table-bordered">
+                        <thead>
+                          <tr>
+                            <th>Palabra</th>
+                            <th>Conteo</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+
+                          <% for (var i = 0; i < resultsGeneral.length;  i++) { %>
+                            <tr>
+                              <td><%= resultsGeneral[i].keyword %></td>
+                              <td><%= resultsGeneral[i].count %></td>
+                            </tr>
+                          <% } %>
+
+                        </tbody>
+                      </table>
+                      </div>
 
             </div>
         </div>

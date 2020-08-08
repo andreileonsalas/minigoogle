@@ -1,0 +1,2 @@
+set path=%PATH%;C:\xampp\mysql\bin;
+mysql -u root -p --local-infile bases_progra2 -e "LOAD DATA LOCAL INFILE 'searchfinal.csv'  INTO TABLE searchfinal  FIELDS TERMINATED BY ',' LINES TERMINATED BY '\n'"
