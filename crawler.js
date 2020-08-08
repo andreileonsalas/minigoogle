@@ -11,10 +11,10 @@ let bandera = true;
 async function init() {
     let paginas = [['https://es.wikipedia.org/wiki/Real_Madrid_Club_de_F%C3%BAtbol','https://es.wikipedia.org/wiki/Segunda_Guerra_Mundial','https://es.wikipedia.org/wiki/Pol%C3%ADtica', 'https://es.wikipedia.org/wiki/COVID-19']]
     let utilizados = []
-    for(j=0;j<paginas.length && j<5; j++){
+    for(j=0;j<paginas.length && j<3; j++){
         let band = 0
-        for(i=0;i < paginas[j].length && i< 2;i++){
-            console.log(paginas[j][i]);
+        for(i=0;i < paginas[j].length;i++){
+            console.log(i);
         try {
             const $ = await request({
                 uri: paginas[j][i],
@@ -59,16 +59,16 @@ async function init() {
                     let enlace =$(this).attr('href');
                     if (enlace != undefined)
                         enlacex = completar_link(enlace,paginas[j][i])
-                        console.log(enlacex);
                     if (verificar_link(evitar,enlace))
                     if (band==0){
                         paginas.push([enlacex]);
                         band = 1
                     }
                     else{
+                        bandera=true;
                         for(g=0; g<paginas.length && bandera == true ;g++){
                             for(k=0;k<paginas[g].length && bandera==true;k++){
-                                var res= paginas[i][j].localeCompare(enlacex)
+                                var res= paginas[g][k].localeCompare(enlacex)
                                 if(res==0){
                                     bandera=false;
                                 }
@@ -78,7 +78,6 @@ async function init() {
                           
                         
                             paginas[j+1].push(enlacex);
-                            bandera=true;
                         
                     }
                 }
@@ -107,17 +106,7 @@ function verificar_link (lista,link){
     return result;
 }
 
-function rep(l,e){
-    for(i=0; i<l.length && bandera == true ;i++){
-        for(j=0;j<l[i].length && bandera==true;j++){
-            var res= l[i][j].localeCompare(e)
-            if(res==0){
-                bandera=false;
-            }
-        }
-    }
-    return bandera;
-}
+
 
 
 function revisar_inicio (link){
