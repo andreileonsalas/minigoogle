@@ -28,43 +28,85 @@ router.get('/search/:id',async (req,res)=>{
 
   const word = req.params.id;
   console.log(word);
+  var splitted = word.split(" ");
+  console.log(splitted);
+  console.log(splitted.length);
+  if (splitted.length < 2){
+
+    pool.query('SELECT * FROM searchfinal WHERE keyword = "' + word + '" ORDER BY weight DESC', (error1, result1) => {
+      if (error1) throw error1;
+      pool.query('SELECT * FROM cantidadPorPagina WHERE keyword = "' + word + '" ORDER BY count DESC', (error2, result2) => {
+        if (error2) throw error2;
+
+        var total = 0;
+        for (var i = 0; i < result2.length; i++) {
+          total += result2[i].count;
+        }
+        var result3 =
+          [
+            {
+              keyword: word,
+              count: total
+            }
+          ]
+
+        console.log(result1);
+        //res.send(result);
+        console.log(result2);
+        //res.send(result);
+        console.log("Total: " + total);
 
 
-  pool.query('SELECT * FROM searchfinal WHERE keyword = "' + word + '" ORDER BY weight DESC', (error1, result1) => {
-    if (error1) throw error1;
-    pool.query('SELECT * FROM cantidadPorPagina WHERE keyword = "' + word + '" ORDER BY count DESC', (error2, result2) => {
-      if (error2) throw error2;
+        res.render('search', {
+          results: result1,
+          resultsPagina: result2,
+          resultsGeneral: result3
+        });
 
-      var total = 0;
-      for (var i = 0; i < result2.length; i++) {
-        total += result2[i].count;
-      }
-      var result3 =
-        [
-          {
-            keyword: word,
-            count: total
-          }
-        ]
-
-      console.log(result1);
-      //res.send(result);
-      console.log(result2);
-      //res.send(result);
-      console.log("Total: " + total);
-
-
-      res.render('search', {
-        results: result1,
-        resultsPagina: result2,
-        resultsGeneral: result3
       });
 
     });
+  }
+  else {
+    //SELECT * FROM `searchfinal` WHERE keyword = "he" OR keyword = "hasta" GROUP BY link ORDER BY weight DESC;
+
+    pool.query('SELECT * FROM searchfinal WHERE keyword = "' + word + '" ORDER BY weight DESC', (error1, result1) => {
+      if (error1) throw error1;
 
 
+      // pool.query('SELECT * FROM cantidadPorPagina WHERE keyword = "' + word + '" ORDER BY count DESC', (error2, result2) => {
+      //   if (error2) throw error2;
+      //
+      //   var total = 0;
+      //   for (var i = 0; i < result2.length; i++) {
+      //     total += result2[i].count;
+      //   }
+      //   var result3 =
+      //     [
+      //       {
+      //         keyword: word,
+      //         count: total
+      //       }
+      //     ]
+      //
+      //   console.log(result1);
+      //   //res.send(result);
+      //   console.log(result2);
+      //   //res.send(result);
+      //   console.log("Total: " + total);
+      //
+      //
+      //   res.render('search', {
+      //     results: result1,
+      //     resultsPagina: result2,
+      //     resultsGeneral: result3
+      //   });
+      //
+      // });
 
-  });
+    });
+
+  }
 
 });
 
