@@ -33,14 +33,14 @@ router.get('/search/:id',async (req,res)=>{
   console.log(splitted.length);
   if (splitted.length < 2){
 
-    pool.query('SELECT * FROM searchfinal WHERE keyword = "' + word + '" ORDER BY weight DESC', (error1, result1) => {
+    pool.query('SELECT link, weight AS CWeight FROM searchfinal WHERE keyword = "' + word + '" ORDER BY weight DESC', (error1, result1) => {
       if (error1) throw error1;
-      pool.query('SELECT * FROM cantidadPorPagina WHERE keyword = "' + word + '" ORDER BY count DESC', (error2, result2) => {
+      pool.query('SELECT link, weight AS CWeight FROM cantidadPorPagina WHERE keyword = "' + word + '" ORDER BY weight DESC', (error2, result2) => {
         if (error2) throw error2;
 
         var total = 0;
         for (var i = 0; i < result2.length; i++) {
-          total += result2[i].count;
+          total += result2[i].CWeight;
         }
         var result3 =
           [
@@ -60,7 +60,8 @@ router.get('/search/:id',async (req,res)=>{
         res.render('search', {
           results: result1,
           resultsPagina: result2,
-          resultsGeneral: result3
+          resultsGeneral: result3,
+          palabras: word
         });
 
       });
@@ -69,40 +70,77 @@ router.get('/search/:id',async (req,res)=>{
   }
   else {
     //SELECT * FROM `searchfinal` WHERE keyword = "he" OR keyword = "hasta" GROUP BY link ORDER BY weight DESC;
+    //SELECT t0.link, t0.keyword, t0.weight FROM (SELECT * FROM `searchfinal` WHERE keyword = "hasta" OR keyword = "he" ) AS t0
+    /*
+    SELECT link, SUM(weight) AS CWeight, count(link) AS CLink
+    FROM `searchfinal`
+    WHERE keyword = "hasta" OR keyword = "he" OR keyword = "Stéfano"
+    GROUP BY link
+    HAVING CLink > 2
+    ORDER BY CWeight DESC
+    */
 
-    pool.query('SELECT * FROM searchfinal WHERE keyword = "' + word + '" ORDER BY weight DESC', (error1, result1) => {
+    var consultaInicio = 'SELECT link, SUM(weight) AS CWeight, count(link) AS CLink FROM ';
+    var consultaWhere = ' WHERE keyword = "';
+    var consultaMedio = ' GROUP BY link HAVING CLink > ';
+    var consultaHaving = splitted.length-1;
+    var consultaFinal = ' ORDER BY CWeight DESC ';
+
+    for (var i = 0; i < splitted.length; i++) {
+      consultaWhere += splitted[i];
+      consultaWhere += '" ';
+      if(i < splitted.length - 1){
+        consultaWhere += ' OR keyword = "';
+      }
+    }
+
+    var consultaSearchFinal = consultaInicio + 'searchfinal' + consultaWhere + consultaMedio + consultaHaving + consultaFinal;
+    console.log(consultaSearchFinal);
+    var consultaPorPagina = consultaInicio + 'cantidadPorPagina' + consultaWhere + consultaMedio + consultaHaving + consultaFinal;
+
+    pool.query(consultaSearchFinal, (error1, result1) => {
       if (error1) throw error1;
 
-
-      // pool.query('SELECT * FROM cantidadPorPagina WHERE keyword = "' + word + '" ORDER BY count DESC', (error2, result2) => {
-      //   if (error2) throw error2;
-      //
-      //   var total = 0;
-      //   for (var i = 0; i < result2.length; i++) {
-      //     total += result2[i].count;
-      //   }
-      //   var result3 =
-      //     [
-      //       {
-      //         keyword: word,
-      //         count: total
-      //       }
-      //     ]
-      //
-      //   console.log(result1);
-      //   //res.send(result);
-      //   console.log(result2);
-      //   //res.send(result);
-      //   console.log("Total: " + total);
-      //
-      //
-      //   res.render('search', {
-      //     results: result1,
-      //     resultsPagina: result2,
-      //     resultsGeneral: result3
-      //   });
-      //
+      // console.log(result1);
+      // var result2 = {}
+      // var result3 = {}
+      // res.render('search', {
+      //   results: result1,
+      //   resultsPagina: result2,
+      //   resultsGeneral: result3,
+      //   palabras: word
       // });
+
+      pool.query(consultaPorPagina, (error2, result2) => {
+        if (error2) throw error2;
+
+        var total = 0;
+        for (var i = 0; i < result2.length; i++) {
+          total += result2[i].CWeight;
+        }
+        var result3 =
+          [
+            {
+              keyword: word,
+              count: total
+            }
+          ]
+
+        console.log(result1);
+        //res.send(result);
+        console.log(result2);
+        //res.send(result);
+        console.log("Total: " + total);
+
+
+        res.render('search', {
+          results: result1,
+          resultsPagina: result2,
+          resultsGeneral: result3,
+          palabras: word
+        });
+
+      });
 
     });
 

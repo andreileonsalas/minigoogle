@@ -37,13 +37,13 @@
                   Resultados de la palabra por peso:
                 </h3>
 
-                <div class="container">
+                <div class="card-body">
                   <!--<h2>Nodos</h2>-->
                   <table class="table table-bordered">
                     <thead>
                       <tr>
                         <th>Link</th>
-                        <th>Palabra</th>
+                        <th>Palabra(s)</th>
                         <th>Peso</th>
                       </tr>
                     </thead>
@@ -51,8 +51,8 @@
                       <% for (var i = 0; i < results.length;  i++) { %>
                         <tr>
                           <td><%= results[i].link %></td>
-                          <td><%= results[i].keyword %></td>
-                          <td><%= results[i].weight %></td>
+                          <td><%= palabras %></td>
+                          <td><%= results[i].CWeight %></td>
                         </tr>
                       <% } %>
                     </tbody>
@@ -66,13 +66,13 @@
                     Conteo de palabra por pagina:
                   </h3>
 
-                  <div class="container">
+                  <div class="card-body">
                     <!--<h2>Nodos</h2>-->
                     <table class="table table-bordered">
                       <thead>
                         <tr>
                           <th>Link</th>
-                          <th>Palabra</th>
+                          <th>Palabra(s)</th>
                           <th>Conteo</th>
                         </tr>
                       </thead>
@@ -81,8 +81,8 @@
                         <% for (var i = 0; i < resultsPagina.length;  i++) { %>
                           <tr>
                             <td><%= resultsPagina[i].link %></td>
-                            <td><%= resultsPagina[i].keyword %></td>
-                            <td><%= resultsPagina[i].count %></td>
+                            <td><%= palabras %></td>
+                            <td><%= resultsPagina[i].CWeight %></td>
                           </tr>
                         <% } %>
 
@@ -97,12 +97,12 @@
                       Conteo de palabra en general:
                     </h3>
 
-                    <div class="container">
+                    <div class="card-body">
                       <!--<h2>Nodos</h2>-->
                       <table class="table table-bordered">
                         <thead>
                           <tr>
-                            <th>Palabra</th>
+                            <th>Palabra(s)</th>
                             <th>Conteo</th>
                           </tr>
                         </thead>
@@ -110,7 +110,7 @@
 
                           <% for (var i = 0; i < resultsGeneral.length;  i++) { %>
                             <tr>
-                              <td><%= resultsGeneral[i].keyword %></td>
+                              <td><%= palabras %></td>
                               <td><%= resultsGeneral[i].count %></td>
                             </tr>
                           <% } %>
